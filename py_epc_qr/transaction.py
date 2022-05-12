@@ -1,38 +1,7 @@
 import qrcode
 import yaml
 
-ALLOWED_KEYS = [
-            'beneficiary',
-            'iban',
-            'amount',
-            'remittance'
-            ]
-
-rows = {
-    1: "bcd",
-    2: "version",
-    3: "encoding",
-    4: "identification_code",
-    5: "bic",
-    6: "beneficiary",
-    7: "iban",
-    8: "amount",
-    9: "purpose",
-    10: "remittance_structured",
-    11: "remittance_unstructured",
-    12: "originator_information",
-}
-
-ENCODINGS = {
-    1: "UTF-8",
-    2: "ISO-8859-1",
-    3: "ISO-8859-2",
-    4: "ISO-8859-4",
-    5: "ISO-8859-5",
-    6: "ISO-8859-7",
-    7: "ISO-8859-10",
-    8: "ISO-8859-15",
-}
+from py_epc_qr.constants import ALLOWED_KEYS, ROW_MAPPING, ENCODINGS
 
 
 class epc_qr:
@@ -64,14 +33,14 @@ class epc_qr:
 
     def to_txt(self, file_name: str = "qr_source.txt"):
         with open(file_name, "w", encoding=self.resolve_encoding()) as file:
-            for key, value in rows.items():
+            for key, value in ROW_MAPPING.items():
                 file.write(self.__getattribute__(value))
                 if key < 12:
                     file.write("\n")
 
     def to_str(self) -> str:
         res = ""
-        for key, value in rows.items():
+        for key, value in ROW_MAPPING.items():
             res += self.__getattribute__(value)
             if key < 12:
                 res += "\n"
@@ -87,7 +56,6 @@ class epc_qr:
         img = qr.make_image()
         img.save(file_name)
         print("created image")
-        
 
     # Properties
 
@@ -140,7 +108,9 @@ class epc_qr:
         if not value.replace(" ", "").isalnum():
             raise ValueError("beneficiary is not alphanumeric")
         if not 1 <= len(value) <= (max_length := 70):
-            raise ValueError(f"beneficiary is mandatory, and must not exceed {max_length} characters")
+            raise ValueError(
+                f"beneficiary is mandatory, and must not exceed {max_length} characters"
+            )
         self.__beneficiary = value
 
     @property
@@ -192,15 +162,17 @@ class consumer_epc_qr(epc_qr):
 
     @classmethod
     def from_yaml(cls, file_name: str):
-        with open(file_name, 'r') as file:
+        with open(file_name, "r") as file:
             data = yaml.safe_load(file)
         if not sorted(list(data.keys())) == sorted(ALLOWED_KEYS):
-            raise AssertionError(f'yaml template has incorrect entries (allowed are {ALLOWED_KEYS})')
+            raise AssertionError(
+                f"yaml template has incorrect entries (allowed are {ALLOWED_KEYS})"
+            )
         return cls(**data)
 
 
 if __name__ == "__main__":
-    epc = consumer_epc_qr.from_yaml('template.yaml')
+    epc = consumer_epc_qr.from_yaml("template.yaml")
     epc = consumer_epc_qr(
         "Wikimedia Fördergesellschaft", "DE33100205000001194700", 1, "Danke"
     )
