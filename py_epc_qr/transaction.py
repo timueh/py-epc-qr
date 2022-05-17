@@ -2,7 +2,7 @@ import qrcode
 import yaml
 
 from py_epc_qr.constants import ALLOWED_KEYS, ROW_MAPPING, ENCODINGS
-from py_epc_qr.checks import check_beneficiary, check_version, check_amount, check_encoding, check_iban, check_remittance_unstructured
+from py_epc_qr.checks import check_beneficiary, check_version, check_amount, check_encoding, check_iban, check_remittance_unstructured, validate
 
 
 class epc_qr:
@@ -66,9 +66,7 @@ class epc_qr:
 
     @version.setter
     def version(self, value: str):
-        valid, err = check_version(value, self.bic)
-        if not valid and err is not None:
-            raise err
+        validate(check_version(value, self.bic))
         self.__version = value
 
     @property
@@ -77,9 +75,7 @@ class epc_qr:
 
     @amount.setter
     def amount(self, value):
-        valid, err = check_amount(value)
-        if not valid and err is not None:
-            raise err
+        validate(check_amount(value))
         self.__amount = "EUR{:.2f}".format(float(value))
 
     @property
@@ -88,9 +84,7 @@ class epc_qr:
 
     @encoding.setter
     def encoding(self, value):
-        valid, err = check_encoding(value)
-        if not valid and err is not None:
-            raise err
+        validate(check_encoding(value))
 
         self.__encoding = str(value)
 
@@ -103,9 +97,7 @@ class epc_qr:
 
     @beneficiary.setter
     def beneficiary(self, value: str):
-        valid, err = check_beneficiary(value)
-        if not valid and err is not None:
-            raise err
+        validate(check_beneficiary(value))
         self.__beneficiary = value
 
 
@@ -115,9 +107,7 @@ class epc_qr:
 
     @iban.setter
     def iban(self, value: str):
-        valid, err = check_iban(value)
-        if not valid and err is not None:
-            raise err
+        validate(check_iban(value))
         self.__iban = value
 
     @property
@@ -126,9 +116,7 @@ class epc_qr:
 
     @remittance_unstructured.setter
     def remittance_unstructured(self, value):
-        valid, err = check_remittance_unstructured(value)
-        if not valid and err is not None:
-            raise err
+        validate(check_remittance_unstructured(value))
         self.__remittance_unstructured = value
 
 
