@@ -2,6 +2,7 @@ import qrcode
 import yaml
 
 from py_epc_qr.constants import ALLOWED_KEYS, ROW_MAPPING, ENCODINGS
+from py_epc_qr.checks import check_beneficiary, check_version, check_amount, check_encoding, check_iban, check_remittance_unstructured
 
 
 class epc_qr:
@@ -65,10 +66,9 @@ class epc_qr:
 
     @version.setter
     def version(self, value: str):
-        if value not in (valid_versions := ["001", "002"]):
-            raise ValueError(f"invalid version `{value}` (choose from {valid_versions}")
-        if value == "001" and not self.bic:
-            raise AssertionError("version 001 requires a BIC")
+        valid, err = check_version(value, self.bic)
+        if not valid and err is not None:
+            raise err
         self.__version = value
 
     @property
@@ -77,13 +77,10 @@ class epc_qr:
 
     @amount.setter
     def amount(self, value):
-        value = float(value)
-        if not 0.01 <= value <= 999999999.99:
-            raise ValueError(f"the amount {value} is out of bounds")
-
-        if value != round(value, 2):
-            raise ValueError("the amount is not a two-digit decimal number")
-        self.__amount = "EUR{:.2f}".format(value)
+        valid, err = check_amount(value)
+        if not valid and err is not None:
+            raise err
+        self.__amount = "EUR{:.2f}".format(float(value))
 
     @property
     def encoding(self):
@@ -91,8 +88,9 @@ class epc_qr:
 
     @encoding.setter
     def encoding(self, value):
-        if not 1 <= int(value) <= 8:
-            raise ValueError("encoding must be between 1 and 8")
+        valid, err = check_encoding(value)
+        if not valid and err is not None:
+            raise err
 
         self.__encoding = str(value)
 
@@ -105,13 +103,11 @@ class epc_qr:
 
     @beneficiary.setter
     def beneficiary(self, value: str):
-        if not value.replace(" ", "").isalnum():
-            raise ValueError("beneficiary is not alphanumeric")
-        if not 1 <= len(value) <= (max_length := 70):
-            raise ValueError(
-                f"beneficiary is mandatory, and must not exceed {max_length} characters"
-            )
+        valid, err = check_beneficiary(value)
+        if not valid and err is not None:
+            raise err
         self.__beneficiary = value
+
 
     @property
     def iban(self):
@@ -119,17 +115,9 @@ class epc_qr:
 
     @iban.setter
     def iban(self, value: str):
-        if not value.isalnum():
-            raise ValueError("iban is not alphanumeric")
-        country_code = value[0:1]
-        check_digits = value[2:3]
-        bban = value[4:]
-        if not country_code.isalpha():
-            raise ValueError("invalid iban country code")
-        if not check_digits.isnumeric():
-            raise ValueError("invalid check digits")
-        if len(bban) > 30:
-            raise ValueError("bban is too long")
+        valid, err = check_iban(value)
+        if not valid and err is not None:
+            raise err
         self.__iban = value
 
     @property
@@ -138,10 +126,9 @@ class epc_qr:
 
     @remittance_unstructured.setter
     def remittance_unstructured(self, value):
-        if not value.replace(" ", "").isalnum():
-            raise ValueError("unstructered remittance is non alphanumeric")
-        if len(value) > 140:
-            raise ValueError("unstructured remittance exceeds 140 characters")
+        valid, err = check_remittance_unstructured(value)
+        if not valid and err is not None:
+            raise err
         self.__remittance_unstructured = value
 
 
