@@ -1,4 +1,4 @@
-from py_epc_qr.main import app
+from py_epc_qr.cli import app
 from typer.testing import CliRunner
 import pytest
 
