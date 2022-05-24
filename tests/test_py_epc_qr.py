@@ -1,11 +1,12 @@
-from py_epc_qr import __version__
-from py_epc_qr.transaction import consumer_epc_qr, epc_qr
-
-import pytest
 import filecmp
 from os import remove
-import qrcode
+
 import PIL
+import pytest
+import qrcode
+
+from py_epc_qr import __version__
+from py_epc_qr.transaction import consumer_epc_qr, epc_qr
 
 
 def test_version():

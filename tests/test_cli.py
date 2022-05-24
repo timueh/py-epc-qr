@@ -1,7 +1,8 @@
+import pytest
+from typer.testing import CliRunner
+
 from py_epc_qr import __version__
 from py_epc_qr.cli import app
-from typer.testing import CliRunner
-import pytest
 
 runner = CliRunner()
 

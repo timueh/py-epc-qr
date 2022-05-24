@@ -3,14 +3,14 @@ import typer
 app = typer.Typer()
 
 from py_epc_qr import __version__
-from py_epc_qr.transaction import consumer_epc_qr
 from py_epc_qr.checks import (
+    check_amount,
     check_beneficiary,
     check_iban,
-    check_amount,
-    validate_prompt,
     check_remittance_unstructured,
+    validate_prompt,
 )
+from py_epc_qr.transaction import consumer_epc_qr
 
 
 @app.command()
@@ -29,7 +29,7 @@ def create(
     """
 
     if from_yaml:
-        typer.echo(f"creating from yaml...")
+        typer.echo("creating from yaml...")
         epc = consumer_epc_qr.from_yaml(from_yaml)
         epc.to_qr(out)
         typer.echo(f"success: you may view your png {out}")

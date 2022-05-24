@@ -1,16 +1,16 @@
 import qrcode
 import yaml
 
-from py_epc_qr.constants import ALLOWED_KEYS, ROW_MAPPING, ENCODINGS
 from py_epc_qr.checks import (
-    check_beneficiary,
-    check_version,
     check_amount,
+    check_beneficiary,
     check_encoding,
     check_iban,
     check_remittance_unstructured,
+    check_version,
     validate,
 )
+from py_epc_qr.constants import ALLOWED_KEYS, ENCODINGS, ROW_MAPPING
 
 
 class epc_qr:
