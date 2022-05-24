@@ -93,6 +93,7 @@ class TestEpcQr:
             "999999999.99+0.01",
             "10.001",
             "0.011",
+            "abc",
         ],
     )
     def test_epc_qr_amount_raises_exception(self, value):

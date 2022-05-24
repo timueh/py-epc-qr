@@ -10,7 +10,11 @@ def check_version(value: str, bic: str) -> tuple:
     return check(True, None)
 
 def check_amount(value: float) -> tuple:
-    value = float(value)
+
+    try:
+        value = float(value)
+    except Exception as e:
+        return check(False, ValueError('amount must be convertible to float'))
     if not 0.01 <= value <= 999999999.99:
         return check(False, ValueError(f"the amount {value} is out of bounds"))
 
@@ -57,3 +61,6 @@ def check_remittance_unstructured(value: str) -> tuple:
 def validate(res: namedtuple) -> None:
     if not res.valid and res.error is not None:
         raise res.error
+
+def validate_prompt(res: namedtuple) -> None:
+    return res.valid

@@ -144,11 +144,3 @@ class consumer_epc_qr(epc_qr):
                 f"yaml template has incorrect entries (allowed are {ALLOWED_KEYS})"
             )
         return cls(**data)
-
-
-if __name__ == "__main__":
-    epc = consumer_epc_qr.from_yaml("template.yaml")
-    epc = consumer_epc_qr(
-        "Wikimedia Fördergesellschaft", "DE33100205000001194700", 1, "Danke"
-    )
-    epc.to_qr()
