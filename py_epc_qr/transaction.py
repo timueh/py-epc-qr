@@ -2,7 +2,15 @@ import qrcode
 import yaml
 
 from py_epc_qr.constants import ALLOWED_KEYS, ROW_MAPPING, ENCODINGS
-from py_epc_qr.checks import check_beneficiary, check_version, check_amount, check_encoding, check_iban, check_remittance_unstructured, validate
+from py_epc_qr.checks import (
+    check_beneficiary,
+    check_version,
+    check_amount,
+    check_encoding,
+    check_iban,
+    check_remittance_unstructured,
+    validate,
+)
 
 
 class epc_qr:
@@ -99,7 +107,6 @@ class epc_qr:
     def beneficiary(self, value: str):
         validate(check_beneficiary(value))
         self.__beneficiary = value
-
 
     @property
     def iban(self):

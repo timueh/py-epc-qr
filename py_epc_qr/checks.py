@@ -1,20 +1,25 @@
 from collections import namedtuple
 
-check = namedtuple('Check', ['valid', 'error'])
+check = namedtuple("Check", ["valid", "error"])
+
 
 def check_version(value: str, bic: str) -> tuple:
     if value not in (valid_versions := ["001", "002"]):
-        return check(False, ValueError(f"invalid version `{value}` (choose from {valid_versions}"))
+        return check(
+            False,
+            ValueError(f"invalid version `{value}` (choose from {valid_versions}"),
+        )
     if value == "001" and not bic:
         return check(False, AssertionError("version 001 requires a BIC"))
     return check(True, None)
+
 
 def check_amount(value: float) -> tuple:
 
     try:
         value = float(value)
     except Exception as e:
-        return check(False, ValueError('amount must be convertible to float'))
+        return check(False, ValueError("amount must be convertible to float"))
     if not 0.01 <= value <= 999999999.99:
         return check(False, ValueError(f"the amount {value} is out of bounds"))
 
@@ -28,14 +33,19 @@ def check_encoding(value: str) -> tuple:
         return check(False, ValueError("encoding must be between 1 and 8"))
     return check(True, None)
 
+
 def check_beneficiary(value: str) -> tuple:
     if not value.replace(" ", "").isalnum():
         return check(False, ValueError("beneficiary is not alphanumeric"))
     if not 1 <= len(value) <= (max_length := 70):
-        return check(False, ValueError(
-            f"beneficiary is mandatory, and must not exceed {max_length} characters"
-        ))
+        return check(
+            False,
+            ValueError(
+                f"beneficiary is mandatory, and must not exceed {max_length} characters"
+            ),
+        )
     return check(True, None)
+
 
 def check_iban(value: str) -> tuple:
     if not value.isalnum():
@@ -51,16 +61,21 @@ def check_iban(value: str) -> tuple:
         return check(False, ValueError("bban is too long"))
     return check(True, None)
 
+
 def check_remittance_unstructured(value: str) -> tuple:
     if not value.replace(" ", "").isalnum():
         return check(False, ValueError("unstructered remittance is non alphanumeric"))
     if len(value) > 140:
-        return check(False, ValueError("unstructured remittance exceeds 140 characters"))
+        return check(
+            False, ValueError("unstructured remittance exceeds 140 characters")
+        )
     return check(True, None)
+
 
 def validate(res: namedtuple) -> None:
     if not res.valid and res.error is not None:
         raise res.error
+
 
 def validate_prompt(res: namedtuple) -> None:
     return res.valid

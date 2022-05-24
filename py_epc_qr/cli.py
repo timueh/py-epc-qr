@@ -2,8 +2,16 @@ import typer
 
 app = typer.Typer()
 
+from py_epc_qr import __version__
 from py_epc_qr.transaction import consumer_epc_qr
-from py_epc_qr.checks import check_beneficiary, check_iban, check_amount, validate_prompt, check_remittance_unstructured
+from py_epc_qr.checks import (
+    check_beneficiary,
+    check_iban,
+    check_amount,
+    validate_prompt,
+    check_remittance_unstructured,
+)
+
 
 @app.command()
 def create(
@@ -14,7 +22,11 @@ def create(
     from_yaml: str = typer.Option(
         default="",
         help="specify yaml file from which to create qr",
-    )):
+    ),
+):
+    """
+    Create EPC-compliant QR code for IBAN-based wire transfer within European economic area.
+    """
 
     if from_yaml:
         typer.echo(f"creating from yaml...")
@@ -38,19 +50,27 @@ def create(
         if not validate_prompt(check_remittance_unstructured(remittance)):
             typer.echo("The value for the remittance appears incorrect.")
             raise typer.Exit(code=1)
-        
+
         epc = consumer_epc_qr(beneficiary, iban, amount, remittance)
         epc.to_qr(out)
         typer.echo("Tadaaaa!")
 
-def version_callback(value: bool):
-    if value:
-        typer.echo(f"Awesome CLI Version: {__version__}")
-        raise typer.Exit()
+
+@app.command()
+def version():
+    """
+    Show version and exit
+    """
+    typer.echo(f"py-epc-qr v{__version__}")
+    raise typer.Exit()
+
 
 @app.callback()
-def callback():
-    pass
+def main():
+    """
+    Create EPC-compliant QR codes for wire transfers.
+    """
+
 
 if __name__ == "__main__":
     app()
