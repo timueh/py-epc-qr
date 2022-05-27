@@ -1,3 +1,5 @@
+"""Implements the command line interface (CLI)."""
+
 import typer
 
 app = typer.Typer()
@@ -59,7 +61,7 @@ def create(
 @app.command()
 def version():
     """
-    Show version and exit
+    Show version and exit.
     """
     typer.echo(f"py-epc-qr v{__version__}")
     raise typer.Exit()

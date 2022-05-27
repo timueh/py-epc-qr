@@ -1,3 +1,5 @@
+"""Constants according to epc qr code specification."""
+
 ALLOWED_KEYS = ["beneficiary", "iban", "amount", "remittance"]
 
 ROW_MAPPING = {
