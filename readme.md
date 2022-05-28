@@ -18,13 +18,38 @@ Henceforth, you are welcome to use the code at your own dispense, but any use is
 You can easily install the Python package via pip.
 
 ```python
-pip install py_epc_qr
+pip install py-epc-qr
 ```
 
 ## Usage
 
-### By Hand
+You can use the package as part of your own code or as a standalone command line interface (CLI).
 
-### From Template
+### Code
+
+```python
+from py_epc_qr.transaction import consumer_epc_qr
+epc_qr = consumer_epc_qr(
+    beneficiary= "Wikimedia Foerdergesellschaft",
+    iban= "DE33100205000001194700",
+    amount= 123.45,
+    remittance= "Spende fuer Wikipedia"
+    )
+epc_qr.to_qr()
+```
+
+### CLI
+
+<todo>
+
+### From interaction
+
+<todo>
+
+#### From template
+
+<todo>
 
 ## Limitations
+
+Currently, the EPC specifications are implemented only to work with IBAN-based consumer wire transfers within the European Economic Area.
