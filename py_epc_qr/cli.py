@@ -52,7 +52,7 @@ def create(
             typer.echo("The value for the remittance appears incorrect.")
             raise typer.Exit(code=1)
         epc = consumer_epc_qr(beneficiary, iban, amount, remittance)
-    
+
     epc.to_qr(out)
     typer.echo(f"🎉🎉🎉 You may view your png {out} 🎉🎉🎉")
 
@@ -71,7 +71,3 @@ def main():
     """
     Create EPC-compliant QR codes for wire transfers.
     """
-
-
-if __name__ == "__main__":
-    app()

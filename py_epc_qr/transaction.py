@@ -19,6 +19,7 @@ class epc_qr:
     """
     Class containing epc qr code specification and its conversion to image/text.
     """
+
     def __init__(
         self,
         version: str,
@@ -184,6 +185,7 @@ class consumer_epc_qr(epc_qr):
     """
     Standard consumer EPC QR code for IBAN-based wire transfer within European economic area.
     """
+
     def __init__(self, beneficiary: str, iban: str, amount: float, remittance: str):
         """Initialize"""
         super().__init__(

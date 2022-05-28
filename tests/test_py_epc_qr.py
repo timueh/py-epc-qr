@@ -31,6 +31,7 @@ class TestEpcQr:
     """
     Class to test core functionality.
     """
+
     @pytest.mark.parametrize(
         "fun, given, expected_txt, expected_png",
         [
