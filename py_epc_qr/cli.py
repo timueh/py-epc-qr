@@ -13,6 +13,7 @@ from py_epc_qr.checks import (
     validate_prompt,
 )
 from py_epc_qr.transaction import consumer_epc_qr
+from PIL import Image
 
 
 @app.command()
@@ -31,10 +32,8 @@ def create(
     """
 
     if from_yaml:
-        typer.echo("creating from yaml...")
+        typer.echo("creating qr code from yaml...")
         epc = consumer_epc_qr.from_yaml(from_yaml)
-        epc.to_qr(out)
-        typer.echo(f"success: you may view your png {out}")
     else:
         beneficiary = typer.prompt("Enter the beneficiary", type=str)
         if not validate_prompt(check_beneficiary(beneficiary)):
@@ -52,10 +51,10 @@ def create(
         if not validate_prompt(check_remittance_unstructured(remittance)):
             typer.echo("The value for the remittance appears incorrect.")
             raise typer.Exit(code=1)
-
         epc = consumer_epc_qr(beneficiary, iban, amount, remittance)
-        epc.to_qr(out)
-        typer.echo("Tadaaaa!")
+    
+    epc.to_qr(out)
+    typer.echo(f"🎉🎉🎉 You may view your png {out} 🎉🎉🎉")
 
 
 @app.command()
