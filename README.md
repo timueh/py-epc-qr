@@ -8,12 +8,12 @@
 Sick of copy-and-pasting IBANs to forms?
 Why not just scan a QR code and have your favorite banking app take care of the rest?
 
-Why not be generous and support wikipedia with 123,45€?
+Why not be generous and support wikipedia with EUR10?
 Grab your phone and scan the image (created with this tool).
 
-![Support Wikipedia with 123,45 €](tests/data/qr_version_002.png "Support Wikipedia with 123,45 €")
+![Support Wikipedia with 10 €](tests/data/qr_wikimedia.png "Support Wikipedia with 10 €")
 
-[The create QR code complies with the European Payments Council (EPC) Quick Response (QR) code guidelines.](https://en.wikipedia.org/wiki/EPC_QR_code)
+[The created QR code complies with the European Payments Council (EPC) Quick Response (QR) code guidelines.](https://en.wikipedia.org/wiki/EPC_QR_code)
 
 **1st Disclaimer**: The author of this code has no affiliation with the EPC whatsoever.
 Henceforth, you are welcome to use the code at your own dispense, but any use is at your own (commercial) risk.
