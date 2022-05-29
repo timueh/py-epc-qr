@@ -9,7 +9,7 @@ Sick of copy-and-pasting IBANs to forms?
 Why not just scan a QR code and have your favorite banking app take care of the rest?
 
 Why not be generous and support wikipedia with EUR10?
-Grab your phone and scan the image (created with this tool).
+Grab your phone, open your banking app, select the QR scanner and scan the image below which was created with this tool.
 
 ![Support Wikipedia with 10 €](tests/data/qr_wikimedia.png "Support Wikipedia with 10 €")
 
