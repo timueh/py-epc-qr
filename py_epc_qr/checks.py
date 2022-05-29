@@ -28,7 +28,10 @@ def check_amount(value: float) -> tuple:
     try:
         value = float(value)
     except Exception as e:
-        return check(False, ValueError("amount must be convertible to float"))
+        return check(
+            False,
+            ValueError(f"amount must be convertible to float; exception raised: {e}"),
+        )
     if not 0.01 <= value <= 999999999.99:
         return check(False, ValueError(f"the amount {value} is out of bounds"))
 

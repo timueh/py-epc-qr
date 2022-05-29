@@ -2,8 +2,6 @@
 
 import typer
 
-app = typer.Typer()
-
 from py_epc_qr import __version__
 from py_epc_qr.checks import (
     check_amount,
@@ -13,7 +11,8 @@ from py_epc_qr.checks import (
     validate_prompt,
 )
 from py_epc_qr.transaction import consumer_epc_qr
-from PIL import Image
+
+app = typer.Typer()
 
 
 @app.command()

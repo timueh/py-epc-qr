@@ -1,3 +1,8 @@
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![codecov](https://codecov.io/gh/timueh/py-epc-qr/branch/main/graph/badge.svg?token=LMQKVGWT2W)](https://codecov.io/gh/timueh/py-epc-qr)
+![tests](https://github.com/timueh/py-epc-qr/actions/workflows/pytest.yml/badge.svg)
+![lint_with_black](https://github.com/timueh/py-epc-qr/actions/workflows/black.yml/badge.svg)
+
 # Create QR codes for wire transfers
 
 Sick of copy-and-pasting IBANs to forms?
