@@ -1,10 +1,25 @@
+"""Core functionality that converts epc qr code format to qr code image."""
+
 import qrcode
 import yaml
 
-from py_epc_qr.constants import ALLOWED_KEYS, ROW_MAPPING, ENCODINGS
+from py_epc_qr.checks import (
+    check_amount,
+    check_beneficiary,
+    check_encoding,
+    check_iban,
+    check_remittance_unstructured,
+    check_version,
+    validate,
+)
+from py_epc_qr.constants import ALLOWED_KEYS, ENCODINGS, ROW_MAPPING
 
 
 class epc_qr:
+    """
+    Class containing epc qr code specification and its conversion to image/text.
+    """
+
     def __init__(
         self,
         version: str,
@@ -18,6 +33,7 @@ class epc_qr:
         remittance_unstructured: str,
         originator_information: str,
     ):
+        """Initialize"""
         self.bcd = "BCD"
         self.bic = bic
         self.version = version
@@ -31,7 +47,10 @@ class epc_qr:
         self.remittance_unstructured = remittance_unstructured
         self.originator_information = originator_information
 
-    def to_txt(self, file_name: str = "qr_source.txt"):
+    def to_txt(self, file_name: str = "qr_source.txt") -> None:
+        """
+        Write EPC-compliant string to text file `file_name`
+        """
         with open(file_name, "w", encoding=self.resolve_encoding()) as file:
             for key, value in ROW_MAPPING.items():
                 file.write(self.__getattribute__(value))
@@ -39,6 +58,9 @@ class epc_qr:
                     file.write("\n")
 
     def to_str(self) -> str:
+        """
+        Write EPC-compliant string.
+        """
         res = ""
         for key, value in ROW_MAPPING.items():
             res += self.__getattribute__(value)
@@ -47,6 +69,9 @@ class epc_qr:
         return res
 
     def to_qr(self, file_name: str = "qr.png"):
+        """
+        Write EPC-compliant string to png image `file_name`
+        """
         qr = qrcode.QRCode(
             version=6,
             error_correction=qrcode.constants.ERROR_CORRECT_M,
@@ -57,96 +82,112 @@ class epc_qr:
         img.save(file_name)
         print("created image")
 
-    # Properties
+    # Properties of class
 
     @property
-    def version(self):
+    def version(self) -> str:
+        """
+        Return EPC version entry.
+        """
         return self.__version
 
     @version.setter
     def version(self, value: str):
-        if value not in (valid_versions := ["001", "002"]):
-            raise ValueError(f"invalid version `{value}` (choose from {valid_versions}")
-        if value == "001" and not self.bic:
-            raise AssertionError("version 001 requires a BIC")
+        """
+        Set EPC version entry.
+        """
+        validate(check_version(value, self.bic))
         self.__version = value
 
     @property
-    def amount(self):
+    def amount(self) -> str:
+        """
+        Return EPC amount entry.
+        """
         return self.__amount
 
     @amount.setter
     def amount(self, value):
-        value = float(value)
-        if not 0.01 <= value <= 999999999.99:
-            raise ValueError(f"the amount {value} is out of bounds")
-
-        if value != round(value, 2):
-            raise ValueError("the amount is not a two-digit decimal number")
-        self.__amount = "EUR{:.2f}".format(value)
+        """
+        Set and validate EPC amount entry.
+        """
+        validate(check_amount(value))
+        self.__amount = "EUR{:.2f}".format(float(value))
 
     @property
-    def encoding(self):
+    def encoding(self) -> str:
+        """
+        Return EPC encoding entry.
+        """
         return self.__encoding
 
     @encoding.setter
-    def encoding(self, value):
-        if not 1 <= int(value) <= 8:
-            raise ValueError("encoding must be between 1 and 8")
-
+    def encoding(self, value) -> None:
+        """
+        Set and validate EPC encoding entry.
+        """
+        validate(check_encoding(value))
         self.__encoding = str(value)
 
     def resolve_encoding(self) -> str:
+        """
+        Resolve EPC encoding entry.
+        """
         return ENCODINGS[int(self.encoding)]
 
     @property
-    def beneficiary(self):
+    def beneficiary(self) -> str:
+        """
+        Return EPC beneficiary entry.
+        """
         return self.__beneficiary
 
     @beneficiary.setter
-    def beneficiary(self, value: str):
-        if not value.replace(" ", "").isalnum():
-            raise ValueError("beneficiary is not alphanumeric")
-        if not 1 <= len(value) <= (max_length := 70):
-            raise ValueError(
-                f"beneficiary is mandatory, and must not exceed {max_length} characters"
-            )
+    def beneficiary(self, value: str) -> None:
+        """
+        Set and validate EPC beneficiary entry.
+        """
+        validate(check_beneficiary(value))
         self.__beneficiary = value
 
     @property
-    def iban(self):
+    def iban(self) -> str:
+        """
+        Return EPC iban entry.
+        """
         return self.__iban
 
     @iban.setter
     def iban(self, value: str):
-        if not value.isalnum():
-            raise ValueError("iban is not alphanumeric")
-        country_code = value[0:1]
-        check_digits = value[2:3]
-        bban = value[4:]
-        if not country_code.isalpha():
-            raise ValueError("invalid iban country code")
-        if not check_digits.isnumeric():
-            raise ValueError("invalid check digits")
-        if len(bban) > 30:
-            raise ValueError("bban is too long")
+        """
+        Set and validate EPC iban entry.
+        """
+        validate(check_iban(value))
         self.__iban = value
 
     @property
-    def remittance_unstructured(self):
+    def remittance_unstructured(self) -> str:
+        """
+        Return EPC unstructured remittance entry.
+        """
         return self.__remittance_unstructured
 
     @remittance_unstructured.setter
-    def remittance_unstructured(self, value):
-        if not value.replace(" ", "").isalnum():
-            raise ValueError("unstructered remittance is non alphanumeric")
-        if len(value) > 140:
-            raise ValueError("unstructured remittance exceeds 140 characters")
+    def remittance_unstructured(self, value) -> None:
+        """
+        Set and validate EPC unstructured remittance entry.
+        """
+        validate(check_remittance_unstructured(value))
         self.__remittance_unstructured = value
 
 
 class consumer_epc_qr(epc_qr):
+    """
+    Standard consumer EPC QR code for IBAN-based wire transfer within European economic area.
+    """
+
     def __init__(self, beneficiary: str, iban: str, amount: float, remittance: str):
+        """Initialize"""
         super().__init__(
             version="002",
             encoding=1,
@@ -162,6 +203,7 @@ class consumer_epc_qr(epc_qr):
 
     @classmethod
     def from_yaml(cls, file_name: str):
+        """Create from yaml file"""
         with open(file_name, "r") as file:
             data = yaml.safe_load(file)
         if not sorted(list(data.keys())) == sorted(ALLOWED_KEYS):
@@ -169,11 +211,3 @@ class consumer_epc_qr(epc_qr):
                 f"yaml template has incorrect entries (allowed are {ALLOWED_KEYS})"
             )
         return cls(**data)
-
-
-if __name__ == "__main__":
-    epc = consumer_epc_qr.from_yaml("template.yaml")
-    epc = consumer_epc_qr(
-        "Wikimedia Fördergesellschaft", "DE33100205000001194700", 1, "Danke"
-    )
-    epc.to_qr()

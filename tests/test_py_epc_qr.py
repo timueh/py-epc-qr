@@ -1,22 +1,37 @@
+"""
+Tests for the core functionality.
+"""
+
+import filecmp
+from os import remove
+
+import PIL
+import pytest
+import qrcode
+
 from py_epc_qr import __version__
 from py_epc_qr.transaction import consumer_epc_qr, epc_qr
 
-import pytest
-import filecmp
-from os import remove
-import qrcode
-import PIL
-
 
 def test_version():
+    """
+    Check version.
+    """
     assert __version__ == "0.1.0"
 
 
-def get_valid_dummy_iban():
+def get_valid_dummy_iban() -> str:
+    """
+    Generate a valid dummy IBAN.
+    """
     return "DE" + "1" * 18
 
 
 class TestEpcQr:
+    """
+    Class to test core functionality.
+    """
+
     @pytest.mark.parametrize(
         "fun, given, expected_txt, expected_png",
         [
@@ -66,6 +81,11 @@ class TestEpcQr:
 
     @pytest.mark.parametrize("value", [0, 9])
     def test_epc_qr_encoding_raises_exception(self, value):
+        """
+        Given an invalid encoding
+        When creating an epc qr code
+        Then an exception is raised
+        """
         with pytest.raises(ValueError):
             epc_qr(
                 version="002",
@@ -93,6 +113,7 @@ class TestEpcQr:
             "999999999.99+0.01",
             "10.001",
             "0.011",
+            "abc",
         ],
     )
     def test_epc_qr_amount_raises_exception(self, value):
@@ -156,6 +177,11 @@ class TestEpcQr:
             consumer_epc_qr("ben benefit", get_valid_dummy_iban(), 0.01, value)
 
     def test_epc_qr_from_yaml(self):
+        """
+        Given a yaml template
+        When creating an epc qr
+        Then everything works fine
+        """
         epc_qr_src = consumer_epc_qr.from_yaml("tests/template_version_002.yaml")
         epc_qe_tgt = consumer_epc_qr(
             beneficiary="Wikimedia Foerdergesellschaft",
@@ -166,5 +192,10 @@ class TestEpcQr:
         assert epc_qr_src.to_txt() == epc_qe_tgt.to_txt()
 
     def test_epc_qr_from_yaml_raises_exception(self):
+        """
+        Given an invalid yaml template
+        When creating an epc qr
+        Then an exception is raised
+        """
         with pytest.raises(AssertionError):
             consumer_epc_qr.from_yaml("tests/template_version_002_broken.yaml")
