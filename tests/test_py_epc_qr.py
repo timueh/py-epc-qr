@@ -5,9 +5,7 @@ Tests for the core functionality.
 import filecmp
 from os import remove
 
-import PIL
 import pytest
-import qrcode
 
 from py_epc_qr import __version__
 from py_epc_qr.transaction import consumer_epc_qr, epc_qr
@@ -17,7 +15,7 @@ def test_version():
     """
     Check version.
     """
-    assert __version__ == "0.1.0"
+    assert __version__ == "0.1.2.2"
 
 
 def get_valid_dummy_iban() -> str:
