@@ -2,6 +2,8 @@
 [![codecov](https://codecov.io/gh/timueh/py-epc-qr/branch/main/graph/badge.svg?token=LMQKVGWT2W)](https://codecov.io/gh/timueh/py-epc-qr)
 ![tests](https://github.com/timueh/py-epc-qr/actions/workflows/pytest.yml/badge.svg)
 ![lint_with_black](https://github.com/timueh/py-epc-qr/actions/workflows/black.yml/badge.svg)
+[![pypi](https://img.shields.io/badge/PyPI-py--epc--qr-blue)](https://pypi.org/project/py-epc-qr/)
+
 
 # Create QR codes for wire transfers
 
