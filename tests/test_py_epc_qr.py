@@ -15,7 +15,7 @@ def test_version():
     """
     Check version.
     """
-    assert __version__ == "0.1.2.2"
+    assert __version__ == "0.1.3"
 
 
 def get_valid_dummy_iban() -> str:

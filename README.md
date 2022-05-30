@@ -2,6 +2,8 @@
 [![codecov](https://codecov.io/gh/timueh/py-epc-qr/branch/main/graph/badge.svg?token=LMQKVGWT2W)](https://codecov.io/gh/timueh/py-epc-qr)
 ![tests](https://github.com/timueh/py-epc-qr/actions/workflows/pytest.yml/badge.svg)
 ![lint_with_black](https://github.com/timueh/py-epc-qr/actions/workflows/black.yml/badge.svg)
+[![pypi](https://img.shields.io/badge/PyPI-py--epc--qr-blue)](https://pypi.org/project/py-epc-qr/)
+
 
 # Create QR codes for wire transfers
 
@@ -11,7 +13,9 @@ Why not just scan a QR code and have your favorite banking app take care of the 
 Why not be generous and support wikipedia with EUR10?
 Grab your phone, open your banking app, select the QR scanner and scan the image below which was created with this tool.
 
-![Support Wikipedia with 10 €](tests/data/qr_wikimedia.png "Support Wikipedia with 10 €")
+![Support Wikipedia with 10 €](img/create_qr.gif "Support Wikipedia with 10 €")
+
+![Support Wikipedia with 10 €](img/qr_wikimedia.png "Support Wikipedia with 10 €")
 
 [The created QR code complies with the European Payments Council (EPC) Quick Response (QR) code guidelines.](https://en.wikipedia.org/wiki/EPC_QR_code)
 
