@@ -12,8 +12,7 @@ documentation = "https://github.com/timueh/py-epc-qr"
 [tool.poetry.dependencies]
 python = "^3.9"
 PyYAML = "^6.0"
-qrcode = "^7.3.1"
-Pillow = "^9.1.0"
+"qrcode[pil]" = "^7.3.1"  # Let qrcode decide of the version of Pillow to be installed
 typer = "^0.4.1"
 
 [tool.poetry.dev-dependencies]
